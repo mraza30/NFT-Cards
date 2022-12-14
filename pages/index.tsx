@@ -18,7 +18,7 @@ export default function Home(props: CardsProps) {
         backgroundColor="#1a258d9e"
         m="auto"
         maxW="8xl"
-        h="100vh"
+        minH="100vh"
         flexWrap="wrap"
         gap="1em"
         justifyContent="space-evenly"
