@@ -8,10 +8,34 @@ import {
   Stack,
   Text,
 } from "@chakra-ui/react";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { CardProps } from "../interface/CardProps";
 
 function Card(props: CardProps) {
+  const [countDown, setCountDown] = useState({
+    days: 0,
+    hours: 0,
+    minutes: 0,
+    seconds: 0,
+  });
+  const [liked, setLiked] = useState(props.is_liked);
+  useEffect(() => {
+    const end_date = new Date(props.ends_in).getTime();
+
+    setInterval(() => {
+      const current_date = new Date().getTime();
+      const difference = end_date - current_date;
+      setCountDown({
+        days: Math.floor(difference / (1000 * 60 * 60 * 24)),
+        hours: Math.floor(
+          (difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
+        ),
+        minutes: Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60)),
+        seconds: Math.floor((difference % (1000 * 60)) / 1000),
+      });
+    }, 1000);
+  }, []);
+
   return (
     <Box w="270px" h="500px" bgColor="#112135" p="1em" borderRadius="0.5em">
       <Flex direction="column" h="100%" justifyContent="space-between">
@@ -63,11 +87,12 @@ function Card(props: CardProps) {
           </Box>
           <Spacer />
           <StarIcon
-            color={props.is_liked ? "#ff0c80" : "#474761"}
+            color={liked ? "#ff0c80" : "#474761"}
             marginTop="4px"
+            onClick={() => setLiked((prev) => !prev)}
           />
           <Text as="b" color="#797d83">
-            {props.likes}
+            {props.likes + (liked ? 1 : 0)}
           </Text>
         </Flex>
 
@@ -127,7 +152,7 @@ function Card(props: CardProps) {
             </Text>
             <br />
             <Text as="b" fontSize="sm" color="white">
-              {props.ends_in}
+              {`${countDown.days} : ${countDown.hours} : ${countDown.minutes} : ${countDown.seconds}`}
             </Text>
           </Box>
         </Flex>

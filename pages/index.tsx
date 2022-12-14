@@ -1,12 +1,18 @@
 import { Flex } from "@chakra-ui/react";
 import Head from "next/head";
-import Image from "next/image";
-import Card from "../components/Card";
+// import Image from "next/image";
 import { data } from "../data/cards";
-import { CardProps } from "../interface/CardProps";
-import styles from "../styles/Home.module.css";
+// import { CardProps } from "../interface/CardProps";
+// import styles from "../styles/Home.module.css";
+import dynamic from "next/dynamic";
+import Card from "../components/Card";
 
-export default function Home(props: CardsProps) {
+// const Card = dynamic(() => import("../components/Card"), {
+//   ssr: false,
+// });
+
+export default function Home() {
+  const cards = data;
   return (
     <div>
       <Head>
@@ -24,23 +30,10 @@ export default function Home(props: CardsProps) {
         justifyContent="space-evenly"
         alignItems="center"
       >
-        {props.cards.map((card) => (
+        {cards.map((card) => (
           <Card {...card} key={card.id} />
         ))}
       </Flex>
     </div>
   );
-}
-
-export async function getStaticProps() {
-  const cards = data;
-  return {
-    props: {
-      cards,
-    },
-  };
-}
-
-interface CardsProps {
-  cards: CardProps[];
 }
